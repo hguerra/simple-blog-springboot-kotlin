@@ -1,5 +1,6 @@
 package br.com.carneiro.blog.web.controller
 
+import br.com.carneiro.blog.config.BlogProperties
 import br.com.carneiro.blog.domain.Article
 import br.com.carneiro.blog.domain.User
 import br.com.carneiro.blog.repository.ArticleRepository
@@ -11,11 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable
 import br.com.carneiro.blog.extension.format
 
 @Controller
-class BlogController(private val repository: ArticleRepository) {
+class BlogController(private val repository: ArticleRepository, private val properties: BlogProperties) {
 
     @GetMapping("/")
     fun blog(model: Model): String {
-        model["title"] = "Blog"
+        model["title"] = properties.title
+        model["banner"] = properties.banner
         model["articles"] = repository.findAllByOrderByAddedAtDesc().map { it.render() }
         return "blog"
     }
